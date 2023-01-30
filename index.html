@@ -96,6 +96,10 @@
             height: 3rem;
 
         }
+        #rejects{
+            margin-left: 1em;
+            height: 1em;
+        }
 
         @keyframes roll {
             from {
@@ -212,6 +216,7 @@
                 <td id="chamod"></td>
             </tr>
         </table>
+        <p id="rejects"></p>
 
 
 
@@ -226,6 +231,7 @@
         const abilityArray = [0, 0, 0, 0, 0, 0];
         const modArray = [-3, -3, -3, -3, -3, -3];
         let modsum;
+        let rejects;
         let myClass;
         let mySex;
         const stats = {};
@@ -286,6 +292,7 @@
             document.getElementById("chamod").innerHTML = modArray[5];
             document.getElementById("class").innerHTML = myClass;
             document.getElementById("sex").innerHTML = mySex;
+            document.getElementById("rejects").innerHTML = (rejects + 1) + " farmers retired."
 
         }
         function chooseSex() {
@@ -306,6 +313,7 @@
             statRoller();
             determineMod();
             let modsum = 0;
+            rejects = -1;
             for (var x = 0; x < modArray.length; x++) {
                 modsum += modArray[x];
             }
@@ -316,6 +324,7 @@
                 for (var x = 0; x < modArray.length; x++) {
                     modsum += modArray[x];
                 }
+                rejects += 1;
             }
             chooseSex();
             chooseClass();
