@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSE Chargen</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cinzel">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+
+        }
+
+        body {
+            font-family: "Nunito";
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        
+        td,
+        th {
+            border: 1px solid;
+            padding: .5em;
+            background: white;
+        }
+
+        table {
+            margin: 1em;
+            background: lightgray;
+
+        }
+
+        button {
+            margin: 1em;
+            padding: .5em;
+        }
+
+        header {
+            color: white;
+            background-color: black;
+            padding: 1em;
+            font-size: min(1em, 2.5vw);
+            text-align: center;
+            font-family: "Cinzel";
+        }
+
+        #bio {
+            height: 2em;
+            padding-left: 1em;
+            padding-top: 1em;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2em;
+
+        }
+
+        .label {
+            font-weight: 600;
+
+        }
+
+        .field {
+            margin: 1em;
+        }
+
+        .sep {
+            display: inline-block;
+        }
+
+        footer {
+            margin-top: auto;
+            margin-bottom: 1.5em;
+            text-align: center;
+        }
+
+        .diebox {
+            background: purple;
+            animation: roll 4s linear 0s infinite normal;
+            float: left;
+            margin-right: 1rem;
+            display:none;
+
+        }
+
+        .die {
+            float: left;
+            background: black;
+            mix-blend-mode: multiply;
+            height: 3rem;
+
+        }
+        #rejects{
+            margin-left: 1em;
+            height: 1em;
+        }
+
+        @keyframes roll {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+
+            to {
+                -webkit-transform: rotate(360deg);
+
+            }
+
+            0% {
+                background: red;
+
+            }
+
+            14% {
+                background: orangered;
+
+            }
+
+            28% {
+                background: yellow;
+            }
+
+            42% {
+                background: green;
+
+
+            }
+
+            56% {
+                background: blue;
+
+            }
+
+            70% {
+                background: indigo;
+            }
+
+            84% {
+                background: violet;
+            }
+        }
+
+        @media only screen and (min-width: 600px) {
+            header {
+                text-align: left;
+            }
+
+            #bio {
+                flex-direction: row;
+            }
+            .diebox{
+                display: initial;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id=wrapper>
+        <header>
+            <div class="diebox"><img src="docs/assets/images/d20.png" class="die"></div>
+            <h1>OSE (B/X) Character Generator</h1>
+        </header>
+
+        <div id="bio">
+            <div>
+                <span class="label">Sex: </span>
+                <span class="field" id="sex"></span>
+            </div>
+            <div class=sep>
+                <span class="label">Class: </span>
+                <span class="field" id="class"></span>
+            </div>
+        </div>
+
+        <table>
+            <tr>
+                <th>ABILITY</th>
+                <th>SCORE</th>
+                <th>MOD</th>
+            </tr>
+            <tr>
+                <td class=label>STR:</td>
+                <td id="str"></td>
+                <td id="strmod"></td>
+            </tr>
+            <tr>
+                <td class=label>INT:</td>
+                <td id="int"></td>
+                <td id="intmod"></td>
+            </tr>
+            <tr>
+                <td class=label>WIS:</td>
+                <td id="wis"></td>
+                <td id="wismod"></td>
+            </tr>
+            <tr>
+                <td class=label>DEX:</td>
+                <td id="dex"></td>
+                <td id="dexmod"></td>
+            </tr>
+            <tr>
+                <td class="label">CON:</td>
+                <td id="con"></td>
+                <td id="conmod"></td>
+            </tr>
+            <tr>
+                <td class=label>CHA:</td>
+                <td id="cha"></td>
+                <td id="chamod"></td>
+            </tr>
+        </table>
+        <p id="rejects"></p>
+
+
+
+        <button onclick="generate()">ROLL </button>
+    </div>
+
+    <footer>
+        <p> &copy; Daniel Morgan 2023 </p>
+    </footer>
+
+    <script>
+        const abilityArray = [0, 0, 0, 0, 0, 0];
+        const modArray = [-3, -3, -3, -3, -3, -3];
+        let modsum;
+        let rejects;
+        let myClass;
+        let mySex;
+        const stats = {};
+
+        function abilityRoll() {
+            let val = 0;
+            for (let i = 0; i < 3; i++) {
+                val += Math.floor(Math.random() * 6) + 1;
+            }
+            return val;
+        }
+        function determineMod() {
+            for (var i = 0; i < abilityArray.length; i++) {
+                if (abilityArray[i] >= 4) {
+                    modArray[i] = -2;
+                }
+                if (abilityArray[i] >= 6) {
+                    modArray[i] = -1;
+                }
+                if (abilityArray[i] >= 9) {
+                    modArray[i] = 0;
+                }
+                if (abilityArray[i] >= 13) {
+                    modArray[i] = +1;
+                }
+                if (abilityArray[i] >= 16) {
+                    modArray[i] = +2;
+                }
+                if (abilityArray[i] >= 18) {
+                    modArray[i] = +3;
+                }
+            }
+        }
+        function chooseClass() {
+            let max = 0;
+            for (var i = 0; i < 4; i++) {
+                if (abilityArray[i] > max) {
+                    max = abilityArray[i];
+                }
+            }
+            if (abilityArray[0] == max) myClass = "Fighter";
+            if (abilityArray[1] == max) myClass = "Magic-User";
+            if (abilityArray[2] == max) myClass = "Cleric";
+            if (abilityArray[3] == max) myClass = "Thief";
+        }
+        function display() {
+            document.getElementById("str").innerHTML = abilityArray[0];
+            document.getElementById("int").innerHTML = abilityArray[1];
+            document.getElementById("wis").innerHTML = abilityArray[2];
+            document.getElementById("dex").innerHTML = abilityArray[3];
+            document.getElementById("con").innerHTML = abilityArray[4];
+            document.getElementById("cha").innerHTML = abilityArray[5];
+            document.getElementById("strmod").innerHTML = modArray[0];
+            document.getElementById("intmod").innerHTML = modArray[1];
+            document.getElementById("wismod").innerHTML = modArray[2];
+            document.getElementById("dexmod").innerHTML = modArray[3];
+            document.getElementById("conmod").innerHTML = modArray[4];
+            document.getElementById("chamod").innerHTML = modArray[5];
+            document.getElementById("class").innerHTML = myClass;
+            document.getElementById("sex").innerHTML = mySex;
+            document.getElementById("rejects").innerHTML = (rejects + 1) + " farmers retired."
+
+        }
+        function chooseSex() {
+            let sex = Math.floor(Math.random() * 2) + 1;
+            if (sex == 2) {
+                mySex = "Female";
+            }
+            else {
+                mySex = "Male";
+            }
+        }
+        function statRoller() {
+            for (var i = 0; i < abilityArray.length; i++) {
+                abilityArray[i] = abilityRoll();
+            }
+        }
+        function generate() {
+            statRoller();
+            determineMod();
+            let modsum = 0;
+            rejects = -1;
+            for (var x = 0; x < modArray.length; x++) {
+                modsum += modArray[x];
+            }
+            while (modsum <= 0) {
+                statRoller();
+                determineMod();
+                modsum = 0;
+                for (var x = 0; x < modArray.length; x++) {
+                    modsum += modArray[x];
+                }
+                rejects += 1;
+            }
+            chooseSex();
+            chooseClass();
+            display();
+        }
+
+
+
+    </script>
+</body>
+
+</html>
