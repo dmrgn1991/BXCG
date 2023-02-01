@@ -63,6 +63,9 @@
             flex-direction: column;
 
         }
+        #options{
+            margin-left: 1em;
+        }
         .label {
             font-weight: 600;
         }
@@ -229,8 +232,12 @@
                     <td id="chamod"></td>
                 </tr>
             </table>
+            <div id="options">
+                <label for="Demihumans">Allow Demihumans?</label>
+                <input type="checkbox" id="Demihumans">
+            </div>
         </div>
-
+        
         <p id="rejects"></p>
 
 
@@ -255,6 +262,7 @@
         let myHD;
         let myHP;
         const stats = {};
+        
 
         function abilityRoll() {
             let val = 0;
@@ -288,20 +296,63 @@
         }
 
         function chooseClass() {
+            let demiHumans = document.getElementById("Demihumans").checked;
             let max = 0;
+            let classChoices = [];
             for (var i = 0; i < 4; i++) {
                 if (abilityArray[i] > max) {
                     max = abilityArray[i];
                 }
             }
-            if (abilityArray[0] == max) myClass = "Fighter";
-            myHD = 8;
-            if (abilityArray[1] == max) myClass = "Magic-User";
-            myHD = 4;
-            if (abilityArray[2] == max) myClass = "Cleric";
-            myHD = 6;
-            if (abilityArray[3] == max) myClass = "Thief";
-            myHD = 6;
+            if (abilityArray[0] == max) classChoices.push("Fighter");
+            
+            if (abilityArray[1] == max) classChoices.push("Magic-User");
+            
+            if (abilityArray[2] == max) classChoices.push("Cleric");
+            
+            if (abilityArray[3] == max) classChoices.push("Thief")
+            
+
+            if (demiHumans){
+                if (abilityArray[0] == max && abilityArray[4] >= 9){
+                    classChoices.push("Dwarf");
+                    
+                }
+                if (abilityArray[1] == max || abilityArray[0] == max){
+                    if (abilityArray[1] >= 9 && abilityArray[0] >= 9){
+                        classChoices.push("Elf");
+                    }
+                }
+                if (abilityArray[0] == max || abilityArray[3] == max){
+                    if (abilityArray[3] >= 9 && abilityArray[4] >= 9){
+                        classChoices.push("Halfling");
+                    }
+                }
+            }
+            myClass = classChoices[Math.floor(Math.random() * classChoices.length)];
+            switch (myClass) {
+                case "Fighter": 
+                    myHD = 8;
+                    break;
+                case "Magic-User":
+                    myHD = 4;
+                    break;
+                case "Cleric":
+                    myHD = 6;
+                    break;
+                case "Thief":
+                    myHD = 6;
+                    break;
+                case "Dwarf":
+                    myHD = 8;
+                    break;
+                case "Elf":
+                    myHD = 6;
+                    break;
+                case "Halfling":
+                    myHD = 6;
+                    break;
+            }
         }
 
         function display() {
