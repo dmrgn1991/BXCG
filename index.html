@@ -13,7 +13,6 @@
             padding: 0;
             margin: 0;
             box-sizing: border-box;
-
         }
 
         body {
@@ -23,7 +22,11 @@
             flex-direction: column;
         }
 
-        
+        #wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
         td,
         th {
             border: 1px solid;
@@ -35,11 +38,13 @@
             margin: 1em;
             background: lightgray;
 
+
         }
 
         button {
             margin: 1em;
             padding: .5em;
+            width: 5em;
         }
 
         header {
@@ -52,26 +57,18 @@
         }
 
         #bio {
-            height: 2em;
             padding-left: 1em;
             padding-top: 1em;
             display: flex;
             flex-direction: column;
-            margin-bottom: 2em;
 
         }
-
         .label {
             font-weight: 600;
-
         }
 
         .field {
-            margin: 1em;
-        }
-
-        .sep {
-            display: inline-block;
+            font-weight: 100;
         }
 
         footer {
@@ -85,7 +82,7 @@
             animation: roll 4s linear 0s infinite normal;
             float: left;
             margin-right: 1rem;
-            display:none;
+            display: none;
 
         }
 
@@ -96,7 +93,8 @@
             height: 3rem;
 
         }
-        #rejects{
+
+        #rejects {
             margin-left: 1em;
             height: 1em;
         }
@@ -150,10 +148,7 @@
                 text-align: left;
             }
 
-            #bio {
-                flex-direction: row;
-            }
-            .diebox{
+            .diebox {
                 display: initial;
             }
 
@@ -169,54 +164,75 @@
         </header>
 
         <div id="bio">
-            <div>
-                <span class="label">Sex: </span>
-                <span class="field" id="sex"></span>
-            </div>
-            <div class=sep>
-                <span class="label">Class: </span>
-                <span class="field" id="class"></span>
-            </div>
+
+            <span class="biolabel label">Sex:&nbsp;
+                <span class="field" id="sex"></span> </span>
+
+
+
+            <span class="biolabel label">Class:&nbsp;
+                <span class="field" id="class"></span> </span>
+
+
+
+            <span class="biolabel label">HP:&nbsp;
+                <span class="field" id="HP"></span></span>
+
+
+
+            <span class="biolabel label">Alignment:&nbsp;
+                <span class="field" id="alignment"></span>
+            </span>
+
+
+
+            <span class="biolabel label">Starting&nbsp;Funds:&nbsp;
+                <span class="field" id="funds"></span></span>
+
+
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th>ABILITY</th>
+                    <th>SCORE</th>
+                    <th>MOD</th>
+                </tr>
+                <tr>
+                    <td class=label>STR:</td>
+                    <td id="str"></td>
+                    <td id="strmod"></td>
+                </tr>
+                <tr>
+                    <td class=label>INT:</td>
+                    <td id="int"></td>
+                    <td id="intmod"></td>
+                </tr>
+                <tr>
+                    <td class=label>WIS:</td>
+                    <td id="wis"></td>
+                    <td id="wismod"></td>
+                </tr>
+                <tr>
+                    <td class=label>DEX:</td>
+                    <td id="dex"></td>
+                    <td id="dexmod"></td>
+                </tr>
+                <tr>
+                    <td class="label">CON:</td>
+                    <td id="con"></td>
+                    <td id="conmod"></td>
+                </tr>
+                <tr>
+                    <td class=label>CHA:</td>
+                    <td id="cha"></td>
+                    <td id="chamod"></td>
+                </tr>
+            </table>
         </div>
 
-        <table>
-            <tr>
-                <th>ABILITY</th>
-                <th>SCORE</th>
-                <th>MOD</th>
-            </tr>
-            <tr>
-                <td class=label>STR:</td>
-                <td id="str"></td>
-                <td id="strmod"></td>
-            </tr>
-            <tr>
-                <td class=label>INT:</td>
-                <td id="int"></td>
-                <td id="intmod"></td>
-            </tr>
-            <tr>
-                <td class=label>WIS:</td>
-                <td id="wis"></td>
-                <td id="wismod"></td>
-            </tr>
-            <tr>
-                <td class=label>DEX:</td>
-                <td id="dex"></td>
-                <td id="dexmod"></td>
-            </tr>
-            <tr>
-                <td class="label">CON:</td>
-                <td id="con"></td>
-                <td id="conmod"></td>
-            </tr>
-            <tr>
-                <td class=label>CHA:</td>
-                <td id="cha"></td>
-                <td id="chamod"></td>
-            </tr>
-        </table>
         <p id="rejects"></p>
+
 
 
 
@@ -234,6 +250,10 @@
         let rejects;
         let myClass;
         let mySex;
+        let myAli;
+        let myFunds;
+        let myHD;
+        let myHP;
         const stats = {};
 
         function abilityRoll() {
@@ -243,6 +263,7 @@
             }
             return val;
         }
+
         function determineMod() {
             for (var i = 0; i < abilityArray.length; i++) {
                 if (abilityArray[i] >= 4) {
@@ -265,6 +286,7 @@
                 }
             }
         }
+
         function chooseClass() {
             let max = 0;
             for (var i = 0; i < 4; i++) {
@@ -273,10 +295,15 @@
                 }
             }
             if (abilityArray[0] == max) myClass = "Fighter";
+            myHD = 8;
             if (abilityArray[1] == max) myClass = "Magic-User";
+            myHD = 4;
             if (abilityArray[2] == max) myClass = "Cleric";
+            myHD = 6;
             if (abilityArray[3] == max) myClass = "Thief";
+            myHD = 6;
         }
+
         function display() {
             document.getElementById("str").innerHTML = abilityArray[0];
             document.getElementById("int").innerHTML = abilityArray[1];
@@ -292,23 +319,53 @@
             document.getElementById("chamod").innerHTML = modArray[5];
             document.getElementById("class").innerHTML = myClass;
             document.getElementById("sex").innerHTML = mySex;
+            document.getElementById("alignment").innerHTML = myAli;
+            document.getElementById("funds").innerHTML = myFunds;
             document.getElementById("rejects").innerHTML = (rejects + 1) + " farmers retired."
+            document.getElementById("HP").innerHTML = myHP;
 
         }
+
         function chooseSex() {
             let sex = Math.floor(Math.random() * 2) + 1;
             if (sex == 2) {
                 mySex = "Female";
-            }
-            else {
+            } else {
                 mySex = "Male";
             }
         }
+
+        function chooseAlignment() {
+            let ali = Math.floor(Math.random() * 3) + 1;
+            switch (ali) {
+                case 1:
+                    myAli = "Lawful";
+                    break;
+                case 2:
+                    myAli = "Neutral";
+                    break;
+                case 3:
+                    myAli = "Chaotic";
+                    break;
+            }
+        }
+
+        function rollFunds() {
+            myFunds = abilityRoll() * 10;
+        }
+
         function statRoller() {
             for (var i = 0; i < abilityArray.length; i++) {
                 abilityArray[i] = abilityRoll();
             }
         }
+
+        function rollHP() {
+            let hp = Math.floor(Math.random() * myHD + 1);
+            let advHp = Math.floor(Math.random() * myHD + 1);
+            myHP = Math.max(hp, advHp) + modArray[4];
+        }
+
         function generate() {
             statRoller();
             determineMod();
@@ -326,13 +383,13 @@
                 }
                 rejects += 1;
             }
+            rollFunds();
             chooseSex();
+            chooseAlignment();
             chooseClass();
+            rollHP();
             display();
         }
-
-
-
     </script>
 </body>
 
