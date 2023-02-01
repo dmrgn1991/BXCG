@@ -101,6 +101,9 @@
             margin-left: 1em;
             height: 1em;
         }
+        #version{
+                display:none;
+            }
 
         @keyframes roll {
             from {
@@ -146,13 +149,23 @@
             }
         }
 
-        @media only screen and (min-width: 600px) {
+        @media only screen and (min-width: 700px) {
             header {
                 text-align: left;
             }
 
             .diebox {
                 display: initial;
+            }
+            #version{
+                background:none;
+                color:white;
+                cursor: pointer;
+                position:absolute;
+                right: 1em;
+                top: 1%;
+                display: initial;
+                border: none;
             }
 
         }
@@ -164,6 +177,7 @@
         <header>
             <div class="diebox"><img src="docs/assets/images/d20.png" class="die"></div>
             <h1>OSE (B/X) Character Generator</h1>
+            <button id="version" onclick="changeLog()">Version&nbsp;1.5</button>
         </header>
 
         <div id="bio">
@@ -440,6 +454,32 @@
             chooseClass();
             rollHP();
             display();
+        }
+
+        function changeLog(){
+            var changelog = `CHANGELOG
+            **VER.1.0**
+            -Site is live
+
+            **VER.1.1**
+            -Fixed bug that required matching highest stats to roll thief
+
+            **VER.1.2**
+            -Add Retired Farmers counter
+
+            **VER.1.3**
+            -Now rolls starting HP
+            -Now rolls starting funds
+            -Now rolls alignment
+
+            **VER.1.4**
+            -Demihumans now allowed, optional
+            -More random class choice, less linear
+
+            **VER.1.5**
+            -Added this changelog and version tracking
+            `
+            alert(changelog)
         }
     </script>
 </body>
